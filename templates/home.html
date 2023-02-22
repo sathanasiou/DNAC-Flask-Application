@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>
+    Provide the information below
+</h1>
+<form method="post" action="/submit-form">
+  Interface: <input name="interface"/>
+  <br/><br/>
+  IP: <input name="ip"/>
+  <br/><br/>
+  Subnet: <input name="subnet"/>
+  <br/><br/>
+  <button type="submit">Submit</button>
+</form>
+
+{% endblock %}

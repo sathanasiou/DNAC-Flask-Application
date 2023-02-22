@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Get DNAC Sites</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <h1>Get DNAC Sites</h1>
+    <form method="get" action="{{ url_for('get_sites') }}">
+      <button type="submit">Dispay DNAC sites</button>
+    </form>
+  </body>
+</html>
+{% endblock %}
