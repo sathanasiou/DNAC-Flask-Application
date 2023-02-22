@@ -1,51 +1,5 @@
-# from flask import Flask
-# from redis import Redis
-
-# app = Flask(__name__)
-# redis = Redis(host='redis', port=6379)
-
-# @app.route('/')
-# def hello():
-#     redis.incr('hits')
-#     counter = str(redis.get('hits'),'utf-8')
-#     return "This webpage has been viewed "+counter+" time(s)"
-
-# if __name__ == "__main__":
-#     app.run(host="0.0.0.0", port=8000, debug=True)
-
-
-
-############################################# 
-#### Example 2: with name in the uri ########
-############################################# 
-
-## The uri for this to run will be : http://localhost:8000/?name=Sofia
-## Github repository: https://github.com/docker/awesome-compose/tree/master/flask-redis
-
-# from flask import Flask, request
-# from datetime import datetime
-
-# app = Flask(__name__)
-
-# @app.route('/')
-# def hello():
-#     name = request.args['name']
-#     return HELLO_HTML.format(
-#              name, str(datetime.now()))
-
-# HELLO_HTML = """
-#      <html><body>
-#          <h1>Hello, {0}!</h1>
-#          The time is {1}.
-#      </body></html>"""
-
-# if __name__ == "__main__":
-#     # Launch the Flask dev server
-#     app.run(host="0.0.0.0", port=8000, debug=True)
-
-
 ############################################ 
-#### Example 3: buttons and actions ########
+#### Example: buttons and actions ########
 ############################################ 
 
 ### Good link : https://plainenglish.io/blog/how-to-create-a-basic-form-in-python-flask-af966ee493fa
@@ -76,6 +30,14 @@ from openpyxl import Workbook
 
 app = Flask(__name__)
 
+# Simple About page -- Only text 
+
+@app.route('/')
+def about():
+    return render_template('about.html')
+
+# Get user input example:
+
 @app.route("/input", methods=["GET", "POST"])
 def home():
     if request.method == "POST":
@@ -85,6 +47,8 @@ def home():
         return 'OK' 
 
     return render_template("home.html")
+
+# Parse input in excel:
 
 @app.route("/submit-form", methods=['POST'])
 def submit_form():
@@ -103,9 +67,11 @@ def submit_form():
     ws['B2'] = ip
     ws['C2'] = subnet
 
-    wb.save('test_data.xlsx')
+    ws.save('test_data.xlsx')
 
     return render_template("download.html")
+
+# Download excel:
 
 @app.route('/download')
 def download_file():
@@ -115,21 +81,6 @@ def download_file():
     response.headers['Content-Disposition'] = 'attachment; filename=test_data.xlsx'
     
     return response
-
-@app.route('/')
-def about():
-    return render_template('about.html')
-
-@app.route('/comments/')
-def comments():
-    comments = ['Choose 1.',
-                'This is the second comment.',
-                'This is the third comment.',
-                'This is the fourth comment.'
-                ]
-
-    return render_template('comments.html', comments=comments)
-
 
 # DNAC begin:
 
@@ -147,13 +98,30 @@ def get_sites():
     for i in range(len(sites.response)):
         names.append(sites.response[i].name)
     return render_template('sites.html', response=names)
+
+def download_sites():
+    path = 'test.txt'
+    return send_file(path, as_attachment=True)
  
+# End DNAC
+
+# Comments page:
+
+@app.route('/comments/')
+def comments():
+    comments = ['Choose 1.',
+                'This is the second comment.',
+                'This is the third comment.',
+                'This is the fourth comment.'
+                ]
+
+    return render_template('comments.html', comments=comments)
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8007 )
 
 # http://127.0.0.1:8000/comments/
-
 
 # @app.route("/", methods=['GET', 'POST'])
 # def index():
